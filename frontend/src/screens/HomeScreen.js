@@ -6,26 +6,30 @@ import axios from "axios";
 
 const HomeScreen = () => {
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
     // This effect does not depend on any values from props or state, so it never needs to re-run.
     useEffect(() => {
         const fetchProducts = async () => {
             const res = await axios.get('/api/products');
             setProducts(res.data);
+            setLoading(false);
         };
         fetchProducts();
     }, []);
     return (
         <React.Fragment>
             <h1>Latest Products</h1>
-            <Row>
-                {products.map((product) => {
-                    return (
-                        <Col sm={12} md={6} lg={4} xl={3} key={product._id}>
-                            <Product product={product}/>
-                        </Col>
-                    )
-                })}
-            </Row>
+            {loading ? <div>loading</div> :
+                <Row>
+                    {products.map((product) => {
+                        return (
+                            <Col sm={12} md={6} lg={4} xl={3} key={product._id}>
+                                <Product product={product}/>
+                            </Col>
+                        )
+                    })}
+                </Row>
+            }
         </React.Fragment>
     )
 }
