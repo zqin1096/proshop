@@ -1,27 +1,33 @@
 import React from "react";
 import {Card} from "react-bootstrap";
+import Rate from "./Rate";
+import PropTypes from 'prop-types';
+import {Link} from "react-router-dom";
 
 const Product = (props) => {
     return (
         <Card className='my-3 p-3 rounded'>
-            <a href={`/product/${props.product._id}`}>
+            {/*Use Link instead of HTML <a> tag to avoid refreshing the page.*/}
+            <Link to={`/product/${props.product._id}`}>
                 {/*variant: defines image position inside the card.*/}
                 <Card.Img src={props.product.image} variant='top'/>
-            </a>
+            </Link>
 
             <Card.Body>
-                <a href={`/product/${props.product._id}`}>
+                <Link to={`/product/${props.product._id}`}>
                     <Card.Title as='div'><strong>{props.product.name}</strong></Card.Title>
-                </a>
+                </Link>
                 <Card.Text as='div'>
-                    <div className='my-3'>
-                        {props.product.rating} from {props.product.numReviews} reviews
-                    </div>
+                    <Rate value={props.product.rating} text={`${props.product.numReviews} reviews`}/>
                 </Card.Text>
                 <Card.Text as='h3'>${props.product.price}</Card.Text>
             </Card.Body>
         </Card>
     )
+}
+
+Product.propTypes = {
+    product: PropTypes.object.isRequired
 }
 
 export default Product;

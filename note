@@ -4,3 +4,5 @@ Add a Bootswatch file (bootstrap.min.css) in the src folder.
 Install React-Bootstrap: npm i react-bootstrap
 
 Add font awesome CDN link in the index.html.
+
+Install React Router: npm i react-router-dom react-router-bootstrap
