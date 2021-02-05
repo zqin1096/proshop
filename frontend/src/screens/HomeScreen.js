@@ -1,10 +1,19 @@
-import React from "react";
-import products from "../products";
+import React, {useState, useEffect} from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Product from "../components/Product";
+import axios from "axios";
 
 const HomeScreen = () => {
+    const [products, setProducts] = useState([]);
+    // This effect does not depend on any values from props or state, so it never needs to re-run.
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const res = await axios.get('/api/products');
+            setProducts(res.data);
+        };
+        fetchProducts();
+    }, []);
     return (
         <React.Fragment>
             <h1>Latest Products</h1>

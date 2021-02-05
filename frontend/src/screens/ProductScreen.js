@@ -1,17 +1,22 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {Link} from "react-router-dom";
 import Rate from "../components/Rate";
-import products from "../products";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import {Button, Card, Image, ListGroup} from "react-bootstrap";
+import axios from "axios";
 
 const ProductScreen = (props) => {
     // All route props (match, location and history) are available.
     // A match object contains information about how a <Route path> matched the URL.
-    const product = products.find((product) => {
-        return product._id === props.match.params.id;
-    });
+    const [product, setProduct] = useState({});
+    useEffect(() => {
+        const fetchProduct = async () => {
+            const res = await axios.get(`/api/products/${props.match.params.id}`);
+            setProduct(res.data);
+        };
+        fetchProduct();
+    }, []);
 
     return (
         <>
