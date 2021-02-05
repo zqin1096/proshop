@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './bootstrap.min.css'; //Add this import to the top level index.js (or App.js) file. Add it before any other .css imports.
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';

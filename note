@@ -1,2 +1,6 @@
 Create React app in the frontend folder: npx create-react-app frontend
 Run React dev server: npm start
+Add a Bootswatch file (bootstrap.min.css) in the src folder.
+Install React-Bootstrap: npm i react-bootstrap
+
+Add font awesome CDN link in the index.html.

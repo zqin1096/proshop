@@ -1,0 +1,3 @@
+main {
+    min-height: 80vh; /* Viewport is the browser window size. vh is a percentage of the full viewport height. */
+}
