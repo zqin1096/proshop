@@ -1,0 +1,22 @@
+{
+  "name": "proshop",
+  "version": "1.0.0",
+  "description": "MERN shopping cart app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zqin1096/proshop.git"
+  },
+  "author": "Zhaoyin Qin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zqin1096/proshop/issues"
+  },
+  "homepage": "https://github.com/zqin1096/proshop#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

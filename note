@@ -6,3 +6,7 @@ Install React-Bootstrap: npm i react-bootstrap
 Add font awesome CDN link in the index.html.
 
 Install React Router: npm i react-router-dom react-router-bootstrap
+
+In the root folder: npm init
+Install Express in the root folder: npm i express
+Run backend: node backend/server
