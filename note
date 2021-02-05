@@ -16,3 +16,6 @@ Install axios: npm i axios
 Add a proxy in the frontend package.json.
 
 Install nodemon and concurrently: npm i -D nodemon concurrently
+Install dotenv: npm i dotenv
+
+Create a file named ".env" in the root folder.
