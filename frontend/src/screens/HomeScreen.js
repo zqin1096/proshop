@@ -1,36 +1,39 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect} from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Product from "../components/Product";
-import axios from "axios";
+import {clearError, getProducts} from "../actions/productAction";
+import {useDispatch, useSelector} from "react-redux";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 
 const HomeScreen = () => {
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const dispatch = useDispatch();
+    // Get the "product" state.
+    const product = useSelector(state => state.product);
     // This effect does not depend on any values from props or state, so it never needs to re-run.
     useEffect(() => {
-        const fetchProducts = async () => {
-            const res = await axios.get('/api/products');
-            setProducts(res.data);
-            setLoading(false);
-        };
-        fetchProducts();
+        // Clear the error if exists before sending the request.
+        dispatch(clearError());
+        dispatch(getProducts());
     }, []);
+
     return (
-        <React.Fragment>
+        <>
             <h1>Latest Products</h1>
-            {loading ? <div>loading</div> :
-                <Row>
-                    {products.map((product) => {
-                        return (
-                            <Col sm={12} md={6} lg={4} xl={3} key={product._id}>
-                                <Product product={product}/>
-                            </Col>
-                        )
-                    })}
-                </Row>
+            {product.loading ?
+                (<Loader/>) : product.error ? (<Message variant='danger'>{product.error}</Message>) :
+                    <Row>
+                        {product.products.map((product) => {
+                            return (
+                                <Col sm={12} md={6} lg={4} xl={3} key={product._id}>
+                                    <Product product={product}/>
+                                </Col>
+                            )
+                        })}
+                    </Row>
             }
-        </React.Fragment>
+        </>
     )
 }
 

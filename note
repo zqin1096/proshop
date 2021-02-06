@@ -23,3 +23,6 @@ Create a file named ".env" in the root folder.
 Create a cluster on mongodb.com.
 
 Install mongoose: npm i mongoose
+
+Redux Thunk: With a plain basic Redux store, you can only do simple synchronous updates by dispatching an action.
+Middleware extends the store's abilities, and lets you write async logic that interacts with the store.
