@@ -19,3 +19,7 @@ Install nodemon and concurrently: npm i -D nodemon concurrently
 Install dotenv: npm i dotenv
 
 Create a file named ".env" in the root folder.
+
+Create a cluster on mongodb.com.
+
+Install mongoose: npm i mongoose
