@@ -14,8 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Toast from "../components/Toast";
 
 const ProductScreen = (props) => {
-    const [show, setShow] = useState(false);
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState('1');
     const dispatch = useDispatch();
     const product = useSelector(state => state.product);
     // All route props (match, location and history) are available.
@@ -73,14 +72,15 @@ const ProductScreen = (props) => {
                                     {product.product.countInStock > 0 ?
                                         <ListGroup.Item>
                                             <Row>
-                                                <Col>Quantity</Col>
-                                                <Form.Control as='select' value={quantity} onChange={(event) => {
-                                                    setQuantity(event.target.value);
-                                                }}>
-                                                    {[...Array(product.product.countInStock).keys()].map((key) => {
-                                                        return <option key={key + 1} value={key + 1}>{key + 1}</option>
-                                                    })}
-                                                </Form.Control>
+                                                <Col className='align-self-center'>Quantity:</Col>
+                                                <Col>
+                                                    <Form.Control as='input' value={quantity}
+                                                                  onChange={(event => {
+                                                                      const regex = /^[0-9\b]+$/;
+                                                                      if (event.target.value === '' || regex.test(event.target.value))
+                                                                          setQuantity(event.target.value);
+                                                                  })}/>
+                                                </Col>
                                             </Row>
                                         </ListGroup.Item> : null
                                     }
@@ -90,7 +90,7 @@ const ProductScreen = (props) => {
                                             onClick={addToCart}
                                             className='btn-block'
                                             type='button'
-                                            disabled={product.product.countInStock === 0}>
+                                            disabled={product.product.countInStock === 0 || quantity === '' || Number(quantity) === 0}>
                                             Add To Cart
                                         </Button>
                                     </ListGroup.Item>
