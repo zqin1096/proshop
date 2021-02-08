@@ -1,18 +1,23 @@
-import React, {useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import {Link} from "react-router-dom";
 import Rate from "../components/Rate";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import {Button, Card, Image, ListGroup} from "react-bootstrap";
+import {Button, Card, Form, Image, ListGroup} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {clearError, getProduct} from "../actions/productAction";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import {addProduct} from "../actions/cartAction";
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Toast from "../components/Toast";
 
 const ProductScreen = (props) => {
+    const [show, setShow] = useState(false);
+    const [quantity, setQuantity] = useState(1);
     const dispatch = useDispatch();
     const product = useSelector(state => state.product);
-    console.log(product);
     // All route props (match, location and history) are available.
     // A match object contains information about how a <Route path> matched the URL.
     useEffect(() => {
@@ -20,6 +25,13 @@ const ProductScreen = (props) => {
         dispatch(clearError());
         dispatch(getProduct(props.match.params.id));
     }, [props.match.params.id]);
+
+    const addToCart = () => {
+        toast(
+            <Toast product={product.product}/>
+        );
+        dispatch(addProduct(product.product, quantity));
+    };
 
     return (
         <>
@@ -58,9 +70,24 @@ const ProductScreen = (props) => {
                                             <Col>{product.product.countInStock > 0 ? 'In Stock' : 'Out Of Stock'}</Col>
                                         </Row>
                                     </ListGroup.Item>
+                                    {product.product.countInStock > 0 ?
+                                        <ListGroup.Item>
+                                            <Row>
+                                                <Col>Quantity</Col>
+                                                <Form.Control as='select' value={quantity} onChange={(event) => {
+                                                    setQuantity(event.target.value);
+                                                }}>
+                                                    {[...Array(product.product.countInStock).keys()].map((key) => {
+                                                        return <option key={key + 1} value={key + 1}>{key + 1}</option>
+                                                    })}
+                                                </Form.Control>
+                                            </Row>
+                                        </ListGroup.Item> : null
+                                    }
                                     <ListGroup.Item>
                                         {/*Create block level buttons—those that span the full width of a parent.*/}
                                         <Button
+                                            onClick={addToCart}
                                             className='btn-block'
                                             type='button'
                                             disabled={product.product.countInStock === 0}>

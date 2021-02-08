@@ -2,8 +2,10 @@ import React from 'react';
 import Container from 'react-bootstrap/Container';
 import {Nav, Navbar} from "react-bootstrap";
 import {LinkContainer} from 'react-router-bootstrap';
+import {useSelector} from "react-redux";
 
 const Header = () => {
+    const cart = useSelector(state => state.cart);
     return (
         <header>
             <Navbar bg="dark" variant='dark' expand="lg" collapseOnSelect>
@@ -18,7 +20,7 @@ const Header = () => {
                         <Nav className="ml-auto">
                             {/*Check font awesome website*/}
                             <LinkContainer to='/cart'>
-                                <Nav.Link><i className='fas fa-shopping-cart'/> Cart</Nav.Link>
+                                <Nav.Link><i className='fas fa-shopping-cart'/> {cart.items.length}</Nav.Link>
                             </LinkContainer>
                             <LinkContainer to='/login'>
                                 <Nav.Link><i className='fas fa-user'/> Sign In</Nav.Link>
