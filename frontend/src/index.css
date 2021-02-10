@@ -1,3 +1,11 @@
 main {
     min-height: 80vh; /* Viewport is the browser window size. vh is a percentage of the full viewport height. */
 }
+
+.dropdown-item.active {
+    background: #4bbf73;
+}
+
+.dropdown-item:hover {
+    background: #919aa1;
+}

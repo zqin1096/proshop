@@ -1,11 +1,20 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
-import {Nav, Navbar} from "react-bootstrap";
+import {Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {LinkContainer} from 'react-router-bootstrap';
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
+import {logout} from "../actions/authAction";
+import {withRouter} from 'react-router-dom';
 
-const Header = () => {
+const Header = (props) => {
+    const dispatch = useDispatch();
     const cart = useSelector(state => state.cart);
+    const auth = useSelector(state => state.auth);
+    const logoutHandler = () => {
+        dispatch(logout());
+        // withRouter.
+        props.history.push('/login');
+    };
     return (
         <header>
             <Navbar bg="dark" variant='dark' expand="lg" collapseOnSelect>
@@ -22,9 +31,21 @@ const Header = () => {
                             <LinkContainer to='/cart'>
                                 <Nav.Link><i className='fas fa-shopping-cart'/> {cart.items.length}</Nav.Link>
                             </LinkContainer>
-                            <LinkContainer to='/login'>
-                                <Nav.Link><i className='fas fa-user'/> Sign In</Nav.Link>
-                            </LinkContainer>
+                            {auth.isAuthenticated && auth.user ?
+                                (
+                                    <NavDropdown id='username' title={auth.user.name}>
+                                        <LinkContainer to='/profile'>
+                                            <NavDropdown.Item>Profile</NavDropdown.Item>
+                                        </LinkContainer>
+                                        <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
+                                    </NavDropdown>
+                                ) :
+                                (
+                                    <LinkContainer to='/login'>
+                                        <Nav.Link><i className='fas fa-user'/> Sign In</Nav.Link>
+                                    </LinkContainer>
+                                )
+                            }
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
@@ -33,4 +54,4 @@ const Header = () => {
     )
 }
 
-export default Header;
+export default withRouter(Header);

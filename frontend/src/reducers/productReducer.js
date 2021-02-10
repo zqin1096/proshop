@@ -1,4 +1,4 @@
-import {SET_PRODUCTS, SET_ERROR, SET_LOADING, SET_PRODUCT, CLEAR_ERROR} from "../actions/types";
+import {SET_PRODUCTS, SET_ERROR, PRODUCT_SET_LOADING, SET_PRODUCT, PRODUCT_CLEAR_ERROR} from "../actions/types";
 
 const initialState = {
     products: [],
@@ -9,7 +9,7 @@ const initialState = {
 
 export const productReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SET_LOADING:
+        case PRODUCT_SET_LOADING:
             return {
                 ...state,
                 loading: true
@@ -32,7 +32,7 @@ export const productReducer = (state = initialState, action) => {
                 loading: false,
                 error: action.payload
             };
-        case CLEAR_ERROR:
+        case PRODUCT_CLEAR_ERROR:
             return {
                 ...state,
                 error: null

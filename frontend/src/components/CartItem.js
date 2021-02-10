@@ -46,12 +46,9 @@ const CartItem = ({item}) => {
                                         disabled={quantity === ''}
                                         onClick={() => {
                                             setShow(false);
-                                            console.log(quantity);
                                             if (Number(quantity) === 0) {
-                                                console.log('enter1')
                                                 dispatch(removeProduct(item.id));
                                             } else {
-                                                console.log('enter2')
                                                 dispatch(updateQuantity(item.id, quantity));
                                             }
                                         }}>

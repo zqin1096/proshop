@@ -3,16 +3,20 @@ import thunk from "redux-thunk";
 import {composeWithDevTools} from "redux-devtools-extension";
 import {productReducer} from "./reducers/productReducer";
 import {cartReducer} from "./reducers/cartReducer";
-
+import {authReducer} from "./reducers/authReducer";
 
 const reducer = combineReducers({
     product: productReducer,
-    cart: cartReducer
+    cart: cartReducer,
+    auth: authReducer
 });
 const initialState = {
     // Get the cart from localStorage.
     cart: {
         items: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : []
+    },
+    auth: {
+        token: localStorage.getItem('token')
     }
 };
 

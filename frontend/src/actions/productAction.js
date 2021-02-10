@@ -1,10 +1,9 @@
-import {CLEAR_ERROR, SET_ERROR, SET_LOADING, SET_PRODUCT, SET_PRODUCTS} from "./types";
+import {PRODUCT_CLEAR_ERROR, SET_ERROR, PRODUCT_SET_LOADING, SET_PRODUCT, SET_PRODUCTS} from "./types";
 import axios from "axios";
-
 
 export const setLoading = () => {
     return {
-        type: SET_LOADING
+        type: PRODUCT_SET_LOADING
     };
 };
 
@@ -46,6 +45,6 @@ export const getProduct = (id) => {
 
 export const clearError = () => {
     return {
-        type: CLEAR_ERROR
+        type: PRODUCT_CLEAR_ERROR
     };
 };
