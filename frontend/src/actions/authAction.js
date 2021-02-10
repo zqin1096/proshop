@@ -1,4 +1,12 @@
-import {AUTH_FAIL, AUTH_SUCCESS, LOAD_USER, AUTH_SET_LOADING, USER_LOGOUT, AUTH_CLEAR_ERROR} from "./types";
+import {
+    AUTH_FAIL,
+    AUTH_SUCCESS,
+    LOAD_USER,
+    AUTH_SET_LOADING,
+    USER_LOGOUT,
+    AUTH_CLEAR_ERROR,
+    UPDATE_USER, UPDATE_USER_FAIL
+} from "./types";
 import axios from "axios";
 
 export const setLoading = () => {
@@ -97,5 +105,29 @@ export const logout = () => {
 export const clearError = () => {
     return {
         type: AUTH_CLEAR_ERROR
+    };
+};
+
+export const updateUser = (user) => {
+    return async (dispatch) => {
+        try {
+            dispatch(setLoading());
+            // Bearer token is set in loadUser().
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            const res = await axios.put('/api/users/profile', user, config);
+            dispatch({
+                type: UPDATE_USER,
+                payload: res.data.user
+            });
+        } catch (error) {
+            dispatch({
+                type: UPDATE_USER_FAIL,
+                payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            });
+        }
     };
 };

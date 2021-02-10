@@ -8,12 +8,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {clearError, login} from "../actions/authAction";
 import Message from "../components/Message";
 
-const LoginScreen = () => {
+const LoginScreen = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const auth = useSelector(state => state.auth);
     const dispatch = useDispatch();
+    const redirect = props.location.search ? props.location.search.split('=')[1] : '/'
     useEffect(() => {
         dispatch(clearError());
     }, []);
@@ -24,6 +25,9 @@ const LoginScreen = () => {
     };
 
     if (auth.isAuthenticated) {
+        if (redirect) {
+            return <Redirect to={redirect}/>
+        }
         return <Redirect to='/'/>
     }
 
@@ -34,15 +38,16 @@ const LoginScreen = () => {
             <Form onSubmit={loginHandler}>
                 <Form.Group controlId='email'>
                     <Form.Label>Email Address</Form.Label>
-                    <Form.Control type='email' placeholder='Enter email' value={email} onChange={(event) => {
+                    <Form.Control type='email' required placeholder='Enter email' value={email} onChange={(event) => {
                         setEmail(event.target.value);
                     }}/>
                 </Form.Group>
                 <Form.Group controlId='password'>
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type='password' placeholder='Enter password' value={password} onChange={(event) => {
-                        setPassword(event.target.value);
-                    }}/>
+                    <Form.Control type='password' required placeholder='Enter password' value={password}
+                                  onChange={(event) => {
+                                      setPassword(event.target.value);
+                                  }}/>
                 </Form.Group>
                 <Button type='submit' variant='primary'>Sign In</Button>
             </Form>

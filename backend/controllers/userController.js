@@ -30,7 +30,7 @@ export const getUser = asyncHandler(async (req, res) => {
 
 // Register a user.
 // POST /api/users
-// Public
+// Public.
 export const registerUser = asyncHandler(async (req, res) => {
     const {name, email, password} = req.body;
     const exist = await User.findOne({email: email});
@@ -50,5 +50,27 @@ export const registerUser = asyncHandler(async (req, res) => {
     } else {
         res.status(400);
         throw new Error('Registration failed');
+    }
+});
+
+// Update user profile.
+// PUT /api/users/profile
+// Private.
+export const updateUser = asyncHandler(async (req, res) => {
+    req.user.name = req.body.name || req.user.name;
+    req.user.email = req.body.email || req.user.email;
+    if (req.body.password) {
+        req.user.password = req.body.password;
+    }
+    try {
+        await req.user.save();
+        const user = await User.findById(req.user._id).select('-password');
+        res.json({
+            user
+        });
+    } catch (error) {
+        res.status(400);
+        console.log('enter');
+        throw new Error('Email is already registered');
     }
 });

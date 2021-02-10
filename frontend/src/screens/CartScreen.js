@@ -7,7 +7,7 @@ import {Link} from "react-router-dom";
 import {Button, Card, ListGroup} from "react-bootstrap";
 import CartItem from "../components/CartItem";
 
-const CartScreen = () => {
+const CartScreen = (props) => {
     const cart = useSelector(state => state.cart);
     const total = cart.items.reduce((accumulator, item) => Number(accumulator) + Number(item.quantity), 0);
     return (
@@ -39,7 +39,7 @@ const CartScreen = () => {
                             <ListGroup.Item>
                                 <Button type='button' className='btn-block' disabled={cart.items.length === 0}
                                         onClick={() => {
-                                            console.log('Checkout');
+                                            props.history.push('/login?redirect=shipping');
                                         }}>
                                     Proceed to Checkout
                                 </Button>

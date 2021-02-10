@@ -11,6 +11,7 @@ import LoginScreen from "./screens/LoginScreen";
 import {useDispatch} from "react-redux";
 import {loadUser} from "./actions/authAction";
 import RegisterScreen from "./screens/RegisterScreen";
+import ProfileScreen from "./screens/ProfileScreen";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -27,6 +28,7 @@ const App = () => {
                     {/*All render methods will be passed the same three route props: match, location, history.*/}
                     <Route path='/login' component={LoginScreen}/>
                     <Route path='/register' component={RegisterScreen}/>
+                    <Route path='/profile' component={ProfileScreen}/>
                     <Route path='/product/:id' component={ProductScreen}/>
                     <Route path='/cart' component={CartScreen}/>
                     <Route path='/' component={HomeScreen} exact/>

@@ -9,9 +9,12 @@ export const ADD_PRODUCT = 'ADD_PRODUCT';
 export const REMOVE_PRODUCT = 'REMOVE_PRODUCT';
 export const UPDATE_QUANTITY = 'UPDATE_QUANTITY';
 
-export const AUTH_SET_LOADING = 'AUTH_SET_LOADING'
+export const AUTH_SET_LOADING = 'AUTH_SET_LOADING';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
 export const AUTH_FAIL = 'AUTH_FAIL';
 export const LOAD_USER = 'LOAD_USER';
 export const USER_LOGOUT = 'USER_LOGOUT';
 export const AUTH_CLEAR_ERROR = 'CLEAR_ERROR';
+
+export const UPDATE_USER = 'UPDATE_USER';
+export const UPDATE_USER_FAIL = 'UPDATE_USER_FAIL';

@@ -22,9 +22,10 @@ const RegisterScreen = () => {
     }, []);
 
     const registerHandler = (event) => {
+        setMessage(null);
         event.preventDefault();
         if (password !== confirm) {
-            setMessage('Please make sure your passwords match')
+            setMessage('Please make sure your passwords match');
         } else {
             dispatch(register(name, email, password));
         }
@@ -42,27 +43,29 @@ const RegisterScreen = () => {
             <Form onSubmit={registerHandler}>
                 <Form.Group controlId='name'>
                     <Form.Label>Name</Form.Label>
-                    <Form.Control type='text' placeholder='Enter name' value={name} onChange={(event) => {
+                    <Form.Control type='text' required placeholder='Enter name' value={name} onChange={(event) => {
                         setName(event.target.value);
                     }}/>
                 </Form.Group>
                 <Form.Group controlId='email'>
                     <Form.Label>Email Address</Form.Label>
-                    <Form.Control type='email' placeholder='Enter email' value={email} onChange={(event) => {
+                    <Form.Control type='email' required placeholder='Enter email' value={email} onChange={(event) => {
                         setEmail(event.target.value);
                     }}/>
                 </Form.Group>
                 <Form.Group controlId='password'>
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type='password' placeholder='Enter password' value={password} onChange={(event) => {
-                        setPassword(event.target.value);
-                    }}/>
+                    <Form.Control type='password' required placeholder='Enter password' value={password}
+                                  onChange={(event) => {
+                                      setPassword(event.target.value);
+                                  }}/>
                 </Form.Group>
                 <Form.Group controlId='confirm'>
                     <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control type='password' placeholder='Confirm password' value={confirm} onChange={(event) => {
-                        setConfirm(event.target.value);
-                    }}/>
+                    <Form.Control type='password' required placeholder='Confirm password' value={confirm}
+                                  onChange={(event) => {
+                                      setConfirm(event.target.value);
+                                  }}/>
                 </Form.Group>
                 <Button type='submit' variant='primary'>Register</Button>
             </Form>
