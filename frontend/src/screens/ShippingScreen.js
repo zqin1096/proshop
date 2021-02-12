@@ -30,6 +30,8 @@ const ShippingScreen = () => {
 
     const auth = useSelector(state => state.auth);
 
+    const cart = useSelector(state => state.cart);
+
     const onShippingChange = (event) => {
         setShipping(event.target.value);
     };
@@ -68,6 +70,11 @@ const ShippingScreen = () => {
 
     if (!auth.isAuthenticated) {
         return <Redirect to='/login?redirect=shipping'/>;
+    }
+
+    // If the cart is empty, avoid go to the shipping page.
+    if (cart.items.length === 0) {
+        return <Redirect to='/cart'/>;
     }
 
     return (
