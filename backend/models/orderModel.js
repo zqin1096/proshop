@@ -32,22 +32,9 @@ const orderSchema = mongoose.Schema({
         }
     ],
     shippingAddress: {
-        address: {
-            type: String,
-            required: true
-        },
-        city: {
-            type: String,
-            required: true
-        },
-        postalCode: {
-            type: String,
-            required: true
-        },
-        country: {
-            type: String,
-            required: true
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'ShippingAddress'
     },
     paymentMethod: {
         type: String,
@@ -92,7 +79,7 @@ const orderSchema = mongoose.Schema({
     }
 }, {
     // The timestamps option tells mongoose to assign createdAt and updatedAt fields to your schema. The type assigned is Date.
-    timestamp: true
+    timestamps: true
 });
 
 const Order = mongoose.model('Order', orderSchema);

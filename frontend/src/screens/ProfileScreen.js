@@ -25,7 +25,8 @@ const ProfileScreen = () => {
         }
     }, [auth.user]);
 
-    if (!auth.user) {
+    // Refresh.
+    if (auth.token && !auth.user) {
         return <Loader/>
     }
 

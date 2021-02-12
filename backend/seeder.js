@@ -7,6 +7,7 @@ import User from "./models/userModel.js";
 import Product from "./models/productModel.js";
 import Order from "./models/orderModel.js";
 import connectDBn from "./config/db.js";
+import {ShippingAddress} from "./models/shippingAddressModel.js";
 
 dotenv.config();
 connectDBn();
@@ -17,6 +18,7 @@ const importData = async () => {
         await Order.deleteMany();
         await Product.deleteMany();
         await User.deleteMany();
+        await ShippingAddress.deleteMany();
 
         const createdUsers = await User.insertMany(users);
         const adminUser = createdUsers[0]._id;

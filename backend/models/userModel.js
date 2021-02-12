@@ -19,7 +19,11 @@ const userSchema = mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
-    }
+    },
+    shippingAddresses: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ShippingAddress'
+    }]
 }, {
     // The timestamps option tells mongoose to assign createdAt and updatedAt fields to your schema. The type assigned is Date.
     timestamps: true

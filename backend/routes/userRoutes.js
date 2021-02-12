@@ -1,5 +1,13 @@
 import express from "express";
-import {authUser, getUser, registerUser, updateUser} from "../controllers/userController.js";
+import {
+    addAddress,
+    authUser,
+    deleteAddress,
+    getAddresses,
+    getUser,
+    registerUser, updateAddress,
+    updateUser
+} from "../controllers/userController.js";
 import {authorize} from "../middlewares/authMiddleware.js";
 
 const userRouter = express.Router();
@@ -9,6 +17,9 @@ userRouter.post('/login', authUser);
 userRouter.route('/profile').get(authorize, getUser);
 userRouter.route('/profile').put(authorize, updateUser);
 userRouter.route('/').post(registerUser);
-
+userRouter.route('/profile/address').post(authorize, addAddress);
+userRouter.route('/profile/address').delete(authorize, deleteAddress);
+userRouter.route('/profile/address').get(authorize, getAddresses);
+userRouter.route('/profile/address').put(authorize, updateAddress);
 
 export default userRouter;

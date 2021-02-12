@@ -4,11 +4,13 @@ import {composeWithDevTools} from "redux-devtools-extension";
 import {productReducer} from "./reducers/productReducer";
 import {cartReducer} from "./reducers/cartReducer";
 import {authReducer} from "./reducers/authReducer";
+import {shippingAddressReducer} from "./reducers/shippingAddressReducer";
 
 const reducer = combineReducers({
     product: productReducer,
     cart: cartReducer,
-    auth: authReducer
+    auth: authReducer,
+    shippingAddress: shippingAddressReducer,
 });
 const initialState = {
     // Get the cart from localStorage.

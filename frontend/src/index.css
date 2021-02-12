@@ -9,3 +9,7 @@ main {
 .dropdown-item:hover {
     background: #919aa1;
 }
+
+.fa, .fas {
+    cursor: pointer;
+}
