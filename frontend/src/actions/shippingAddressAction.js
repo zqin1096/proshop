@@ -48,3 +48,19 @@ export const removeShippingAddress = (id) => {
         }
     }
 }
+
+export const updateShippingAddress = (address) => {
+    return async (dispatch) => {
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            await axios.put('/api/users/profile/address', address, config);
+            dispatch(getShippingAddresses());
+        } catch (error) {
+
+        }
+    };
+};
