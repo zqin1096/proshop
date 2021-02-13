@@ -68,6 +68,13 @@ const ShippingScreen = () => {
         }
     }, [auth, auth.token]);
 
+    // Set Default shipping address.
+    useEffect(() => {
+        if (shippingAddresses) {
+            setShipping(shippingAddresses.length > 0 ? shippingAddresses[0]._id : '');
+        }
+    }, [shippingAddresses]);
+
     if (!auth.isAuthenticated) {
         return <Redirect to='/login?redirect=shipping'/>;
     }

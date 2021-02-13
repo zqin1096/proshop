@@ -86,7 +86,8 @@ export const addAddress = asyncHandler(async (req, res) => {
         city: req.body.city,
         state: req.body.state,
         postalCode: req.body.postalCode,
-        country: req.body.country
+        country: req.body.country,
+        usedAt: Date.now()
     });
     req.user.shippingAddresses.push(shippingAddress._id);
     await req.user.save();
@@ -107,7 +108,14 @@ export const deleteAddress = asyncHandler(async (req, res) => {
 // GET /api/users/profile/address
 // Private.
 export const getAddresses = asyncHandler(async (req, res) => {
-    const addresses = await User.findById(req.user._id).populate('shippingAddresses').select('shippingAddresses');
+    const addresses = await User.findById(req.user._id).populate({
+        path: 'shippingAddresses',
+        options: {
+            sort: {
+                usedAt: -1
+            }
+        }
+    }).select('shippingAddresses');
     res.json(addresses);
 });
 
