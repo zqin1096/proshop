@@ -1,21 +1,17 @@
 import React, {useEffect, useState} from "react";
-import FormContainer from "../components/FormContainer";
 import {Button} from "react-bootstrap";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {
     addShippingAddress,
-    getShippingAddresses,
     removeShippingAddress,
     updateShippingAddress
 } from "../actions/shippingAddressAction";
 import {FormControl, FormControlLabel, FormLabel, Radio, RadioGroup} from "@material-ui/core";
-import {Redirect} from "react-router-dom";
-import ShippingAddressModal from "../components/ShippingAddressModal";
+import ShippingAddressModal from "./ShippingAddressModal";
 
-const ShippingScreen = () => {
-    const {shippingAddresses} = useSelector(state => state.shippingAddress);
-
+const ShippingSection = (props) => {
     const dispatch = useDispatch();
+    const shippingAddresses = props.shippingAddresses;
 
     const [shipping, setShipping] = useState('');
 
@@ -26,11 +22,7 @@ const ShippingScreen = () => {
     const [updateAddress, setUpdateAddress] = useState(null);
     const [updateShow, setUpdateShow] = useState(false);
     const handleUpdateClose = () => setUpdateShow(false);
-    const handleUpdateShow = () => setUpdateShow(true);
-
-    const auth = useSelector(state => state.auth);
-
-    const cart = useSelector(state => state.cart);
+    // const handleUpdateShow = () => setUpdateShow(true);
 
     const onShippingChange = (event) => {
         setShipping(event.target.value);
@@ -61,13 +53,13 @@ const ShippingScreen = () => {
         dispatch(removeShippingAddress(id));
     };
 
-    useEffect(() => {
-        // The token is set in the request header in loadUser().
-        if (auth && auth.user) {
-            dispatch(getShippingAddresses());
-        }
-    }, [auth, auth.token]);
-
+    // useEffect(() => {
+    //     // The token is set in the request header in loadUser().
+    //     if (auth && auth.user) {
+    //         dispatch(getShippingAddresses());
+    //     }
+    // }, [auth, auth.token]);
+    //
     // Set Default shipping address.
     useEffect(() => {
         if (shippingAddresses) {
@@ -75,22 +67,10 @@ const ShippingScreen = () => {
         }
     }, [shippingAddresses]);
 
-    if (!auth.isAuthenticated) {
-        return <Redirect to='/login?redirect=shipping'/>;
-    }
-
-    // If the cart is empty, avoid go to the shipping page.
-    if (cart.items.length === 0) {
-        return <Redirect to='/cart'/>;
-    }
-
     return (
-        <FormContainer>
-            <h1>Shipping Address</h1>
-
+        <React.Fragment>
             {shippingAddresses && shippingAddresses.length > 0 ?
                 <FormControl component="fieldset" style={{marginBottom: '12px'}}>
-                    <FormLabel component="legend">Choose a shipping address</FormLabel>
                     <RadioGroup aria-label="shipping" name="shipping" value={shipping} onChange={onShippingChange}>
                         {
                             shippingAddresses.map((shippingAddress) => {
@@ -158,7 +138,18 @@ const ShippingScreen = () => {
             />
             {shippingAddresses && shippingAddresses.length > 0 &&
             <div>
-                <Button style={{borderRadius: '5px', background: '#f5d587'}} variant='primary' disabled={!shipping}>
+                <Button
+                    style={{borderRadius: '5px', background: '#f5d587'}}
+                    variant='primary'
+                    disabled={!shipping}
+                    onClick={() => {
+                        const shippingAddress = shippingAddresses.find((shippingAddress) => {
+                            return shippingAddress._id === shipping;
+                        })
+                        props.useAddress(`${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.state}, ${shippingAddress.postalCode}, ${shippingAddress.country}`);
+                        props.setKey('1');
+                    }}
+                >
                     Use this address
                 </Button>
             </div>
@@ -166,8 +157,8 @@ const ShippingScreen = () => {
             <div style={{marginTop: '12px'}}>
                 <i className="fas fa-plus" onClick={handleShow}> Add a new address</i>
             </div>
-        </FormContainer>
+        </React.Fragment>
     )
 };
 
-export default ShippingScreen;
+export default ShippingSection;

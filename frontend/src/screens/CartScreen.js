@@ -39,7 +39,7 @@ const CartScreen = (props) => {
                             <ListGroup.Item>
                                 <Button type='button' className='btn-block' disabled={cart.items.length === 0}
                                         onClick={() => {
-                                            props.history.push('/login?redirect=shipping');
+                                            props.history.push('/login?redirect=checkout');
                                         }}>
                                     Proceed to Checkout
                                 </Button>
