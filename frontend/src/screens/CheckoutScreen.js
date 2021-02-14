@@ -8,10 +8,14 @@ import Col from "react-bootstrap/Col";
 import {getShippingAddresses} from "../actions/shippingAddressAction";
 
 const CheckoutScreen = () => {
+    // All shipping addresses of the logged-in user.
     const {shippingAddresses} = useSelector(state => state.shippingAddress);
 
     const [shippingAddress, setShippingAddress] = useState('');
+    // Active key that corresponds to the currently expanded card.
     const [key, setKey] = useState('0');
+
+    // Called when the "use this address" button is clicked.
     const useAddress = (address) => {
         setShippingAddress((address));
     }
@@ -27,6 +31,7 @@ const CheckoutScreen = () => {
         }
     }, [auth, auth.token]);
 
+    // Set default shipping address.
     useEffect(() => {
         if (shippingAddresses) {
             if (shippingAddresses.length > 0) {

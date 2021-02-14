@@ -6,19 +6,23 @@ import {
     removeShippingAddress,
     updateShippingAddress
 } from "../actions/shippingAddressAction";
-import {FormControl, FormControlLabel, FormLabel, Radio, RadioGroup} from "@material-ui/core";
+import {FormControl, FormControlLabel, Radio, RadioGroup} from "@material-ui/core";
 import ShippingAddressModal from "./ShippingAddressModal";
 
 const ShippingSection = (props) => {
     const dispatch = useDispatch();
+    // All shipping addresses of the logged-in user.
     const shippingAddresses = props.shippingAddresses;
 
+    // The id of the selected shipping address.
     const [shipping, setShipping] = useState('');
 
+    // Used for modal that adds a new shipping address.
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    // Used for modal that edit an existing shipping address.
     const [updateAddress, setUpdateAddress] = useState(null);
     const [updateShow, setUpdateShow] = useState(false);
     const handleUpdateClose = () => setUpdateShow(false);
@@ -53,14 +57,7 @@ const ShippingSection = (props) => {
         dispatch(removeShippingAddress(id));
     };
 
-    // useEffect(() => {
-    //     // The token is set in the request header in loadUser().
-    //     if (auth && auth.user) {
-    //         dispatch(getShippingAddresses());
-    //     }
-    // }, [auth, auth.token]);
-    //
-    // Set Default shipping address.
+    // Set default shipping address.
     useEffect(() => {
         if (shippingAddresses) {
             setShipping(shippingAddresses.length > 0 ? shippingAddresses[0]._id : '');

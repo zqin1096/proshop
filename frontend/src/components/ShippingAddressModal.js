@@ -4,6 +4,7 @@ import {states} from "../utils/states";
 
 const ShippingAddressModal = (props) => {
 
+    // When add a new address, shippingAddress is null.
     const shippingAddress = props.shippingAddress;
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
