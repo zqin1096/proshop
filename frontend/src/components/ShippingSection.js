@@ -136,6 +136,7 @@ const ShippingSection = (props) => {
             {shippingAddresses && shippingAddresses.length > 0 &&
             <div>
                 <Button
+                    className='text-dark'
                     style={{borderRadius: '5px', background: '#f5d587'}}
                     variant='primary'
                     disabled={!shipping}
@@ -144,7 +145,6 @@ const ShippingSection = (props) => {
                             return shippingAddress._id === shipping;
                         })
                         props.useAddress(`${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.state}, ${shippingAddress.postalCode}, ${shippingAddress.country}`);
-                        props.setKey('1');
                     }}
                 >
                     Use this address

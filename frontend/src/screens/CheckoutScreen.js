@@ -1,28 +1,47 @@
 import React, {useEffect, useState} from "react";
 import {Redirect} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
-import {Accordion, Button, Card} from "react-bootstrap";
+import {Accordion, Button, Card, ListGroup} from "react-bootstrap";
 import ShippingSection from "../components/ShippingSection";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import {getShippingAddresses} from "../actions/shippingAddressAction";
+import PaymentSection from "../components/PaymentSection";
+import PlaceOrderSection from "../components/PlaceOrderSection";
 
 const CheckoutScreen = () => {
     // All shipping addresses of the logged-in user.
     const {shippingAddresses} = useSelector(state => state.shippingAddress);
 
     const [shippingAddress, setShippingAddress] = useState('');
+
+    // Ideally, the payment methods are stored in the database.
+    const [paymentMethod, setPaymentMethod] = useState('PayPal or Credit Card');
+
     // Active key that corresponds to the currently expanded card.
     const [key, setKey] = useState('0');
 
     // Called when the "use this address" button is clicked.
     const useAddress = (address) => {
         setShippingAddress((address));
-    }
+        setKey('1');
+    };
+
+    // Called when the "use this payment method" button is clicked.
+    const usePaymentMethod = (payment) => {
+        setPaymentMethod(payment);
+        setKey('2');
+    };
 
     const auth = useSelector(state => state.auth);
     const cart = useSelector(state => state.cart);
     const dispatch = useDispatch();
+
+    // Calculate prices.
+    const itemsPrice = (Math.round(cart.items.reduce((accumulator, item) => Number(accumulator) + Number(item.price) * Number(item.quantity), 0) * 100) / 100).toFixed(2);
+    const shippingPrice = (Math.round(itemsPrice * 0.02 * 100) / 100).toFixed(2);
+    const taxPrice = (Math.round(Number(0.15 * itemsPrice) * 100) / 100).toFixed(2);
+    const totalPrice = (Math.round((Number(itemsPrice) + Number(shippingPrice) + Number(taxPrice)) * 100) / 100).toFixed(2);
 
     useEffect(() => {
         // The token is set in the request header in loadUser().
@@ -51,46 +70,154 @@ const CheckoutScreen = () => {
     if (cart.items.length === 0) {
         return <Redirect to='/cart'/>;
     }
+    if (key == null) {
+        if (shippingAddress === '') {
+            setKey('0');
+        } else if (paymentMethod === '') {
+            setKey('1');
+        } else {
+            setKey('2');
+        }
+    }
 
     return (
-        <Accordion
-            activeKey={key}
-            onSelect={(eventKey) => {
-                setKey(eventKey);
-            }}>
-            <Card>
-                <Accordion.Toggle as={Button} variant='info' eventKey="0">
-                    {key === '0' ?
-                        <Row>
-                            <Col md={4} className='text-left'>
-                                Choose a shipping address
-                            </Col>
-                        </Row> :
-                        <Row>
-                            <Col md={4} className='text-left'>
-                                Shipping address
-                            </Col>
-                            <Col md={8} className='text-left'>
-                                {shippingAddress}
-                            </Col>
-                        </Row>
-                    }
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="0">
-                    <Card.Body>
-                        <ShippingSection useAddress={useAddress} setKey={setKey} shippingAddresses={shippingAddresses}/>
-                    </Card.Body>
-                </Accordion.Collapse>
-            </Card>
-            <Card>
-                <Accordion.Toggle as={Button} variant='info' eventKey="1">
-                    Click me!
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="1">
-                    <Card.Body>Hello! I'm another body</Card.Body>
-                </Accordion.Collapse>
-            </Card>
-        </Accordion>
+        <Row>
+            <Col md={8}>
+                <Accordion
+                    activeKey={key}
+                    onSelect={(eventKey) => {
+                        setKey(eventKey);
+                    }}>
+                    <Card>
+                        <Accordion.Toggle as={Button} variant='info' eventKey="0" onClick={() => {
+
+                        }}>
+                            {key === '0' ?
+                                <Row>
+                                    <Col md={4} className='text-left'>
+                                        Choose a shipping address
+                                    </Col>
+                                </Row> :
+                                <Row>
+                                    <Col md={4} className='text-left'>
+                                        Shipping address
+                                    </Col>
+                                    <Col md={8} className='text-left'>
+                                        {shippingAddress}
+                                    </Col>
+                                </Row>
+                            }
+                        </Accordion.Toggle>
+                        <Accordion.Collapse eventKey="0">
+                            <Card.Body>
+                                <ShippingSection useAddress={useAddress} shippingAddresses={shippingAddresses}/>
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
+                    <Card>
+                        <Accordion.Toggle as={Button} variant='info' eventKey="1" disabled={shippingAddress === ''}>
+                            {key === '1' ?
+                                <Row>
+                                    <Col md={4} className='text-left'>
+                                        Choose a payment method
+                                    </Col>
+                                </Row> :
+                                <Row>
+                                    <Col md={4} className='text-left'>
+                                        Payment method
+                                    </Col>
+                                    <Col md={8} className='text-left'>
+                                        {paymentMethod}
+                                    </Col>
+                                </Row>
+                            }
+                        </Accordion.Toggle>
+                        <Accordion.Collapse eventKey="1">
+                            <Card.Body>
+                                <PaymentSection usePaymentMethod={usePaymentMethod}/>
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
+                    <Card>
+                        <Accordion.Toggle as={Button} variant='info' eventKey="2"
+                                          disabled={shippingAddress === '' || paymentMethod === ''}>
+                            {key === '2' ?
+                                <Row>
+                                    <Col md={4} className='text-left'>
+                                        Review items and shipping
+                                    </Col>
+                                </Row> :
+                                <Row>
+                                    <Col md={4} className='text-left'>
+                                        Items and shipping
+                                    </Col>
+                                    <Col md={8} className='text-left'>
+
+                                    </Col>
+                                </Row>
+                            }
+                        </Accordion.Toggle>
+                        <Accordion.Collapse eventKey="2">
+                            <Card.Body>
+                                <PlaceOrderSection/>
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
+                </Accordion>
+            </Col>
+            <Col md={4}>
+                <Card>
+                    <ListGroup variant='flush'>
+                        <ListGroup.Item>
+                            <p className='h4'>Order Summary</p>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                            <Row>
+                                <Col>Items:</Col>
+                                <Col className='text-right'>${itemsPrice}</Col>
+                            </Row>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                            <Row>
+                                <Col>Shipping:</Col>
+                                <Col className='text-right'>${shippingPrice}</Col>
+                            </Row>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                            <Row>
+                                <Col>Estimated tax to be collected:</Col>
+                                <Col className='text-right'>${taxPrice}</Col>
+                            </Row>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                            <Row>
+                                <Col>Order total:</Col>
+                                <Col className='text-right'>${totalPrice}</Col>
+                            </Row>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                            <Button
+                                disabled={shippingAddress === '' || paymentMethod === ''}
+                                type='button'
+                                className='btn-block text-dark'
+                                style={{borderRadius: '5px', background: '#f5d587'}}
+                                onClick={() => {
+                                    if (key === '0') {
+                                        setKey('1');
+                                    } else if (key === '1') {
+                                        setKey('2');
+                                    }
+                                }}
+                            >
+                                {key === '0' ? 'Use this address' :
+                                    key === '1' ? 'Use this payment method' :
+                                        key === '2' ? 'Place your order' : null}
+                            </Button>
+                        </ListGroup.Item>
+                    </ListGroup>
+                </Card>
+            </Col>
+        </Row>
     )
 
 };
