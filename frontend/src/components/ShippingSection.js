@@ -144,7 +144,7 @@ const ShippingSection = (props) => {
                         const shippingAddress = shippingAddresses.find((shippingAddress) => {
                             return shippingAddress._id === shipping;
                         })
-                        props.useAddress(`${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.state}, ${shippingAddress.postalCode}, ${shippingAddress.country}`);
+                        props.useAddress(`${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.state}, ${shippingAddress.postalCode}, ${shippingAddress.country}`, shippingAddress._id);
                     }}
                 >
                     Use this address

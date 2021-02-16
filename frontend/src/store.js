@@ -5,12 +5,14 @@ import {productReducer} from "./reducers/productReducer";
 import {cartReducer} from "./reducers/cartReducer";
 import {authReducer} from "./reducers/authReducer";
 import {shippingAddressReducer} from "./reducers/shippingAddressReducer";
+import {orderReducer} from "./reducers/orderReducer";
 
 const reducer = combineReducers({
     product: productReducer,
     cart: cartReducer,
     auth: authReducer,
     shippingAddress: shippingAddressReducer,
+    order: orderReducer
 });
 const initialState = {
     // Get the cart from localStorage.

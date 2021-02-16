@@ -8,12 +8,15 @@ import Col from "react-bootstrap/Col";
 import {getShippingAddresses} from "../actions/shippingAddressAction";
 import PaymentSection from "../components/PaymentSection";
 import PlaceOrderSection from "../components/PlaceOrderSection";
+import {createOrder} from "../actions/orderAction";
+import Message from "../components/Message";
 
 const CheckoutScreen = () => {
     // All shipping addresses of the logged-in user.
     const {shippingAddresses} = useSelector(state => state.shippingAddress);
 
     const [shippingAddress, setShippingAddress] = useState('');
+    const [shippingAddressId, setShippingAddressId] = useState('');
 
     // Ideally, the payment methods are stored in the database.
     const [paymentMethod, setPaymentMethod] = useState('PayPal or Credit Card');
@@ -22,8 +25,9 @@ const CheckoutScreen = () => {
     const [key, setKey] = useState('0');
 
     // Called when the "use this address" button is clicked.
-    const useAddress = (address) => {
-        setShippingAddress((address));
+    const useAddress = (address, addressId) => {
+        setShippingAddress(address);
+        setShippingAddressId(addressId);
         setKey('1');
     };
 
@@ -35,6 +39,7 @@ const CheckoutScreen = () => {
 
     const auth = useSelector(state => state.auth);
     const cart = useSelector(state => state.cart);
+    const order = useSelector(state => state.order);
     const dispatch = useDispatch();
 
     // Calculate prices.
@@ -55,7 +60,8 @@ const CheckoutScreen = () => {
         if (shippingAddresses) {
             if (shippingAddresses.length > 0) {
                 const shippingAddress = shippingAddresses[0];
-                setShippingAddress(`${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.state}, ${shippingAddress.postalCode}, ${shippingAddress.country}`)
+                setShippingAddress(`${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.state}, ${shippingAddress.postalCode}, ${shippingAddress.country}`);
+                setShippingAddressId(shippingAddress._id);
             } else {
                 setShippingAddress('');
             }
@@ -78,6 +84,10 @@ const CheckoutScreen = () => {
         } else {
             setKey('2');
         }
+    }
+
+    if (!order.loading && !order.error && order.order) {
+        return <Redirect to={`/order/${order.order._id}`}/>
     }
 
     return (
@@ -195,6 +205,11 @@ const CheckoutScreen = () => {
                                 <Col className='text-right'>${totalPrice}</Col>
                             </Row>
                         </ListGroup.Item>
+                        {order.error &&
+                        <ListGroup.Item>
+                            <Message variant='danger'>{order.error}</Message>
+                        </ListGroup.Item>
+                        }
                         <ListGroup.Item>
                             <Button
                                 disabled={shippingAddress === '' || paymentMethod === ''}
@@ -206,6 +221,15 @@ const CheckoutScreen = () => {
                                         setKey('1');
                                     } else if (key === '1') {
                                         setKey('2');
+                                    } else if (key === '2') {
+                                        dispatch(createOrder({
+                                            orderItems: cart.items,
+                                            shippingAddress: shippingAddressId,
+                                            paymentMethod: paymentMethod,
+                                            shippingPrice: shippingPrice,
+                                            taxPrice: taxPrice,
+                                            totalPrice: totalPrice
+                                        }));
                                     }
                                 }}
                             >

@@ -8,6 +8,8 @@ const orderSchema = mongoose.Schema({
     },
     orderItems: [
         {
+            // Prevent Mongoose from creating _id.
+            _id: false,
             name: {
                 type: String,
                 required: true
@@ -24,7 +26,7 @@ const orderSchema = mongoose.Schema({
                 type: Number,
                 required: true
             },
-            product: {
+            id: {
                 type: mongoose.Schema.Types.ObjectId,
                 required: true,
                 ref: 'Product'

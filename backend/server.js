@@ -5,6 +5,7 @@ import productRouter from "./routes/productRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import {errorHandler, notFound} from "./middlewares/errorMiddleware.js";
 import colors from 'colors';
+import orderRouter from "./routes/orderRoutes.js";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
+app.use('/api/orders', orderRouter);
 
 // If no matching route is found, it proceeds to the notfound handler.
 app.use(notFound);
