@@ -23,3 +23,16 @@ export const addOrder = asyncHandler(async (req, res) => {
         res.status(201).json(order);
     }
 });
+
+// Get an order.
+// GET /api/orders/:id
+// Private.
+export const getOrder = asyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id).populate('user', 'name email').populate('shippingAddress'); // Only returns the name and email of the user.
+    if (order) {
+        res.json(order);
+    } else {
+        res.status(404);
+        throw new Error('Order not found');
+    }
+});

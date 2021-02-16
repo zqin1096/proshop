@@ -13,6 +13,7 @@ import {loadUser} from "./actions/authAction";
 import RegisterScreen from "./screens/RegisterScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import CheckoutScreen from "./screens/CheckoutScreen";
+import OrderScreen from "./screens/OrderScreen";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -27,12 +28,13 @@ const App = () => {
             <main className='py-3'>
                 <Container>
                     {/*All render methods will be passed the same three route props: match, location, history.*/}
-                    <Route path='/login' component={LoginScreen}/>
-                    <Route path='/checkout' component={CheckoutScreen}/>
-                    <Route path='/register' component={RegisterScreen}/>
-                    <Route path='/profile' component={ProfileScreen}/>
-                    <Route path='/product/:id' component={ProductScreen}/>
-                    <Route path='/cart' component={CartScreen}/>
+                    <Route path='/login' component={LoginScreen} exact/>
+                    <Route path='/checkout' component={CheckoutScreen} exact/>
+                    <Route path='/order/:id' component={OrderScreen} exact/>
+                    <Route path='/register' component={RegisterScreen} exact/>
+                    <Route path='/profile' component={ProfileScreen} exact/>
+                    <Route path='/product/:id' component={ProductScreen} exact/>
+                    <Route path='/cart' component={CartScreen} exact/>
                     <Route path='/' component={HomeScreen} exact/>
                 </Container>
             </main>
