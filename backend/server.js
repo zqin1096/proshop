@@ -25,6 +25,11 @@ app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
 
+// Get the PayPal client ID (PayPal developer sandbox app).
+app.get('/api/config/paypal', (req, res) => {
+    res.send(process.env.PAYPAL_CLIENT_ID);
+});
+
 // If no matching route is found, it proceeds to the notfound handler.
 app.use(notFound);
 

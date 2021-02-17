@@ -1,18 +1,21 @@
 import {CLEAR_ORDER_STATE, ORDER_FAIL, ORDER_SET_LOADING, ORDER_SUCCESS} from "./types";
 import axios from "axios";
 
-export const createOrder = (order) => {
+export const createOrder = (order, paymentResult) => {
     return async (dispatch) => {
         try {
-            dispatch({
-                type: ORDER_SET_LOADING
-            });
+            // dispatch({
+            //     type: ORDER_SET_LOADING
+            // });
             const config = {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             };
-            const res = await axios.post('/api/orders', order, config);
+            const res = await axios.post('/api/orders', {
+                order: order,
+                paymentResult: paymentResult
+            }, config);
             dispatch({
                 type: ORDER_SUCCESS,
                 payload: res.data

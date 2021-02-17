@@ -10,6 +10,9 @@ import PaymentSection from "../components/PaymentSection";
 import PlaceOrderSection from "../components/PlaceOrderSection";
 import {createOrder} from "../actions/orderAction";
 import Message from "../components/Message";
+import {PayPalButton} from "react-paypal-button-v2";
+import axios from "axios";
+import Loader from "../components/Loader";
 
 const CheckoutScreen = () => {
     // All shipping addresses of the logged-in user.
@@ -23,6 +26,8 @@ const CheckoutScreen = () => {
 
     // Active key that corresponds to the currently expanded card.
     const [key, setKey] = useState('0');
+
+    const [sdkReady, setSdkReady] = useState(false);
 
     // Called when the "use this address" button is clicked.
     const useAddress = (address, addressId) => {
@@ -47,6 +52,31 @@ const CheckoutScreen = () => {
     const shippingPrice = (Math.round(itemsPrice * 0.02 * 100) / 100).toFixed(2);
     const taxPrice = (Math.round(Number(0.15 * itemsPrice) * 100) / 100).toFixed(2);
     const totalPrice = (Math.round((Number(itemsPrice) + Number(shippingPrice) + Number(taxPrice)) * 100) / 100).toFixed(2);
+
+    useEffect(() => {
+        let mounted = true;
+        // Add the PayPal JavaScript SDK to the web page. https://developer.paypal.com/docs/checkout/integrate/
+        const addPayPalScript = async () => {
+            // Get client ID.
+            const res = await axios.get('/api/config/paypal');
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = `https://www.paypal.com/sdk/js?client-id=${res.data}`
+            // A script that will be run asynchronously as soon as it is available.
+            script.async = true;
+            // Set sdkReady to true after the script has been loaded.
+            script.onload = () => {
+                if (mounted) {
+                    setSdkReady(true);
+                }
+            };
+            document.body.appendChild(script);
+        };
+        addPayPalScript();
+        return () => {
+            mounted = false;
+        }
+    }, []);
 
     useEffect(() => {
         // The token is set in the request header in loadUser().
@@ -84,6 +114,9 @@ const CheckoutScreen = () => {
         } else {
             setKey('2');
         }
+    }
+    if (order.loading) {
+        return <Loader/>
     }
 
     if (!order.loading && !order.error && order.order) {
@@ -211,32 +244,39 @@ const CheckoutScreen = () => {
                         </ListGroup.Item>
                         }
                         <ListGroup.Item>
-                            <Button
-                                disabled={shippingAddress === '' || paymentMethod === ''}
-                                type='button'
-                                className='btn-block text-dark'
-                                style={{borderRadius: '5px', background: '#f5d587'}}
-                                onClick={() => {
-                                    if (key === '0') {
-                                        setKey('1');
-                                    } else if (key === '1') {
-                                        setKey('2');
-                                    } else if (key === '2') {
-                                        dispatch(createOrder({
-                                            orderItems: cart.items,
-                                            shippingAddress: shippingAddressId,
-                                            paymentMethod: paymentMethod,
-                                            shippingPrice: shippingPrice,
-                                            taxPrice: taxPrice,
-                                            totalPrice: totalPrice
-                                        }));
-                                    }
-                                }}
-                            >
-                                {key === '0' ? 'Use this address' :
-                                    key === '1' ? 'Use this payment method' :
-                                        key === '2' ? 'Place your order' : null}
-                            </Button>
+                            {key !== '2' ?
+                                <Button
+                                    disabled={shippingAddress === '' || paymentMethod === ''}
+                                    type='button'
+                                    className='btn-block text-dark'
+                                    style={{borderRadius: '5px', background: '#f5d587'}}
+                                    onClick={() => {
+                                        if (key === '0') {
+                                            setKey('1');
+                                        } else if (key === '1') {
+                                            setKey('2');
+                                        }
+                                    }}
+                                >
+                                    {key === '0' ? 'Use this address' :
+                                        key === '1' ? 'Use this payment method' : null}
+                                </Button> :
+                                sdkReady ?
+                                    <PayPalButton
+                                        amount={totalPrice}
+                                        shippingPreference='NO_SHIPPING'
+                                        onSuccess={(paymentResult) => {
+                                            console.log(paymentResult);
+                                            dispatch(createOrder({
+                                                orderItems: cart.items,
+                                                shippingAddress: shippingAddressId,
+                                                paymentMethod: paymentMethod,
+                                                shippingPrice: shippingPrice,
+                                                taxPrice: taxPrice,
+                                                totalPrice: totalPrice
+                                            }, paymentResult));
+                                        }}/> : <Loader/>
+                            }
                         </ListGroup.Item>
                     </ListGroup>
                 </Card>
