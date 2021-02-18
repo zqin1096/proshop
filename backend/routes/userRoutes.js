@@ -4,11 +4,11 @@ import {
     authUser,
     deleteAddress,
     getAddresses,
-    getUser,
+    getUser, getUsers,
     registerUser, updateAddress,
     updateUser
 } from "../controllers/userController.js";
-import {authorize} from "../middlewares/authMiddleware.js";
+import {authorize, checkIsAdmin} from "../middlewares/authMiddleware.js";
 
 const userRouter = express.Router();
 
@@ -21,5 +21,6 @@ userRouter.route('/profile/address').post(authorize, addAddress);
 userRouter.route('/profile/address').delete(authorize, deleteAddress);
 userRouter.route('/profile/address').get(authorize, getAddresses);
 userRouter.route('/profile/address').put(authorize, updateAddress);
+userRouter.route('/').get(authorize, checkIsAdmin, getUsers);
 
 export default userRouter;

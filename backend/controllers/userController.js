@@ -132,3 +132,12 @@ export const updateAddress = asyncHandler(async (req, res) => {
     await shippingAddress.save();
     res.sendStatus(200);
 });
+
+// Get all the users.
+// GET /api/users
+// Private & Admin.
+export const getUsers = asyncHandler(async (req, res) => {
+    // Get all users.
+    const users = await User.find({});
+    res.json(users);
+});
