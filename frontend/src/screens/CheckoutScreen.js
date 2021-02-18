@@ -266,7 +266,6 @@ const CheckoutScreen = () => {
                                         amount={totalPrice}
                                         shippingPreference='NO_SHIPPING'
                                         onSuccess={(paymentResult) => {
-                                            console.log(paymentResult);
                                             dispatch(createOrder({
                                                 orderItems: cart.items,
                                                 shippingAddress: shippingAddressId,

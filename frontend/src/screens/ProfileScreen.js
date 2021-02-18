@@ -4,12 +4,15 @@ import {Redirect} from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Message from "../components/Message";
-import {Button, Form} from "react-bootstrap";
+import {Button, Form, Table} from "react-bootstrap";
 import {clearError, updateUser} from "../actions/authAction";
 import Loader from "../components/Loader";
+import {getOrders} from "../actions/orderAction";
+import {LinkContainer} from 'react-router-bootstrap';
 
 const ProfileScreen = () => {
     const auth = useSelector(state => state.auth);
+    const order = useSelector(state => state.order);
     const dispatch = useDispatch();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -25,13 +28,17 @@ const ProfileScreen = () => {
         }
     }, [auth.user]);
 
+    useEffect(() => {
+        dispatch(getOrders());
+    }, []);
+
     // Refresh.
     if (auth.token && !auth.user) {
         return <Loader/>
     }
 
     if (!auth.isAuthenticated && !auth.loading) {
-        return <Redirect to='/login'/>
+        return <Redirect to='/login?redirect=profile'/>
     }
     const updateHandler = (event) => {
         setMessage(null);
@@ -95,6 +102,41 @@ const ProfileScreen = () => {
             </Col>
             <Col md={9}>
                 <h2>My Orders</h2>
+                {!order.loading && order.error ? <Message variant='danger'>{order.error}</Message> : order.loading ?
+                    <Loader/> :
+                    <Table striped bordered hover responsive className='table-sm'>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                            <th>Delivered</th>
+                            <th/>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {order.orders.map((order) => {
+                            return (
+                                <tr key={order._id}>
+                                    <td>{order._id}</td>
+                                    <td>{order.createdAt.substring(0, 10)}</td>
+                                    <td>{order.totalPrice}</td>
+                                    <td>{order.isDelivered ? (
+                                        order.deliveredAt.substring(0, 10)
+                                    ) : (
+                                        <i className='fas fa-times' style={{color: 'red'}}/>
+                                    )}</td>
+                                    <td>
+                                        <LinkContainer to={`/order/${order._id}`}>
+                                            <Button className='btn-sm' variant='light'>Details</Button>
+                                        </LinkContainer>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                        </tbody>
+                    </Table>
+                }
             </Col>
         </Row>
     );

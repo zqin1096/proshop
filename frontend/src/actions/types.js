@@ -25,3 +25,5 @@ export const ORDER_SET_LOADING = 'ORDER_SET_LOADING';
 export const ORDER_SUCCESS = 'ORDER_SUCCESS';
 export const ORDER_FAIL = 'ORDER_FAIL';
 export const CLEAR_ORDER_STATE = 'CLEAR_ORDER_STATE';
+
+export const SET_USER_ORDERS = 'SET_USER_ORDERS';

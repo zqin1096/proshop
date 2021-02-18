@@ -1,4 +1,4 @@
-import {CLEAR_ORDER_STATE, ORDER_FAIL, ORDER_SET_LOADING, ORDER_SUCCESS} from "./types";
+import {CLEAR_ORDER_STATE, ORDER_FAIL, ORDER_SET_LOADING, ORDER_SUCCESS, SET_USER_ORDERS} from "./types";
 import axios from "axios";
 
 export const createOrder = (order, paymentResult) => {
@@ -53,4 +53,24 @@ export const clearOrderState = () => {
     return {
         type: CLEAR_ORDER_STATE
     };
+};
+
+export const getOrders = () => {
+    return async (dispatch) => {
+        try {
+            dispatch({
+                type: ORDER_SET_LOADING
+            });
+            const res = await axios.get('/api/orders');
+            dispatch({
+                type: SET_USER_ORDERS,
+                payload: res.data
+            });
+        } catch (error) {
+            dispatch({
+                type: ORDER_FAIL,
+                payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            });
+        }
+    }
 };

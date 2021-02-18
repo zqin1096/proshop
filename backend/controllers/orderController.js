@@ -38,9 +38,26 @@ export const addOrder = asyncHandler(async (req, res) => {
 export const getOrder = asyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id).populate('user', 'name email').populate('shippingAddress'); // Only returns the name and email of the user.
     if (order) {
-        res.json(order);
+        // Prevent other users to see this page.
+        if (String(order.user._id) === String(req.user._id)) {
+            res.json(order);
+        } else {
+            res.status(401);
+            throw new Error('Not authorized to see this page');
+        }
     } else {
         res.status(404);
         throw new Error('Order not found');
     }
 });
+
+// Get orders of the user.
+// GET /api/orders
+// Private.
+export const getOrders = asyncHandler(async (req, res) => {
+    const orders = await Order.find({
+        user: req.user._id
+    });
+    res.json(orders);
+});
+
