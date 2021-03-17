@@ -3,8 +3,39 @@ import User from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
 import {ShippingAddress} from "../models/shippingAddressModel.js";
 
+// GET /api/users/:id
+// Private. Admin.
+export const getUserById = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id).select('-password');
+    if (user) {
+        res.json(user);
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
+
+// PUT /api/users/:id
+// Private. Admin.
+export const adminUpdateUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.isAdmin = (req.body.isAdmin === undefined) ? user.isAdmin : req.body.isAdmin;
+    try {
+        await user.save();
+        const updatedUser = await User.findById(user._id).select('-password');
+        res.json({
+            user: updatedUser
+        });
+    } catch (error) {
+        res.status(400);
+        throw new Error('Email is already registered');
+    }
+});
+
 // DELETE /api/users/:id
-// Private.
+// Private. Admin.
 export const deleteUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     console.log(user);
@@ -85,7 +116,6 @@ export const updateUser = asyncHandler(async (req, res) => {
         });
     } catch (error) {
         res.status(400);
-        console.log('enter');
         throw new Error('Email is already registered');
     }
 });

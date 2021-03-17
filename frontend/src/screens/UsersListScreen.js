@@ -9,8 +9,7 @@ import {LinkContainer} from 'react-router-bootstrap';
 const UsersListScreen = () => {
     const dispatch = useDispatch();
     const admin = useSelector(state => state.admin);
-    const auth = useSelector(state => state.auth);
-
+    useSelector(state => state.auth);
     useEffect(() => {
         dispatch(clearError());
         dispatch(getUsers());
@@ -29,7 +28,7 @@ const UsersListScreen = () => {
                                 <th>NAME</th>
                                 <th>EMAIL</th>
                                 <th>ADMIN</th>
-                                <th></th>
+                                <th/>
                             </tr>
                             </thead>
                             <tbody>
@@ -47,7 +46,7 @@ const UsersListScreen = () => {
                                             )}
                                         </td>
                                         <td>
-                                            <LinkContainer to={`/user/${user._id}/edit`}>
+                                            <LinkContainer to={`/admin/user/${user._id}/edit`}>
                                                 <Button variant='light' className='btn-sm'>
                                                     <i className='fas fa-edit'/>
                                                 </Button>

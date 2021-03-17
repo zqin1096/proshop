@@ -8,6 +8,7 @@ import {
     UPDATE_USER, UPDATE_USER_FAIL
 } from "./types";
 import axios from "axios";
+import {clearUser} from "./adminAction";
 
 export const setLoading = () => {
     return {
@@ -99,6 +100,8 @@ export const logout = () => {
         dispatch({
             type: USER_LOGOUT
         });
+        // Clear the user in the admin state.
+        dispatch(clearUser());
     };
 };
 

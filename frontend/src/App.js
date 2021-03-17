@@ -15,6 +15,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 import CheckoutScreen from "./screens/CheckoutScreen";
 import OrderScreen from "./screens/OrderScreen";
 import UsersListScreen from "./screens/UsersListScreen";
+import UserEditScreen from "./screens/UserEditScreen";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -37,6 +38,7 @@ const App = () => {
                     <Route path='/product/:id' component={ProductScreen} exact/>
                     <Route path='/cart' component={CartScreen} exact/>
                     <Route path='/admin/users' component={UsersListScreen} exact/>
+                    <Route path='/admin/user/:id/edit' component={UserEditScreen} exact/>
                     <Route path='/' component={HomeScreen} exact/>
                 </Container>
             </main>

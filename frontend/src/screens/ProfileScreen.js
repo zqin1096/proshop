@@ -54,7 +54,7 @@ const ProfileScreen = () => {
             setShow(true);
             setTimeout(() => {
                 setShow(false);
-            }, 2000)
+            }, 2000);
             setPassword('');
             setConfirm('');
         }

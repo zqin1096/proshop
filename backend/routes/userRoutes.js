@@ -1,10 +1,10 @@
 import express from "express";
 import {
-    addAddress,
+    addAddress, adminUpdateUser,
     authUser,
     deleteAddress, deleteUser,
     getAddresses,
-    getUser, getUsers,
+    getUser, getUserById, getUsers,
     registerUser, updateAddress,
     updateUser
 } from "../controllers/userController.js";
@@ -23,5 +23,7 @@ userRouter.route('/profile/address').get(authorize, getAddresses);
 userRouter.route('/profile/address').put(authorize, updateAddress);
 userRouter.route('/').get(authorize, checkIsAdmin, getUsers);
 userRouter.route('/:id').delete(authorize, checkIsAdmin, deleteUser);
+userRouter.route('/:id').get(authorize, checkIsAdmin, getUserById);
+userRouter.route('/:id').put(authorize, checkIsAdmin, adminUpdateUser);
 
 export default userRouter;
