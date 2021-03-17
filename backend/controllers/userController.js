@@ -3,6 +3,20 @@ import User from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
 import {ShippingAddress} from "../models/shippingAddressModel.js";
 
+// DELETE /api/users/:id
+// Private.
+export const deleteUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    console.log(user);
+    if (user) {
+        await User.deleteOne({_id: user._id});
+        res.sendStatus(200);
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
+
 // POST /api/users/login
 // Public.
 export const authUser = asyncHandler(async (req, res) => {

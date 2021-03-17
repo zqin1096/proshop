@@ -2,7 +2,7 @@ import express from "express";
 import {
     addAddress,
     authUser,
-    deleteAddress,
+    deleteAddress, deleteUser,
     getAddresses,
     getUser, getUsers,
     registerUser, updateAddress,
@@ -22,5 +22,6 @@ userRouter.route('/profile/address').delete(authorize, deleteAddress);
 userRouter.route('/profile/address').get(authorize, getAddresses);
 userRouter.route('/profile/address').put(authorize, updateAddress);
 userRouter.route('/').get(authorize, checkIsAdmin, getUsers);
+userRouter.route('/:id').delete(authorize, checkIsAdmin, deleteUser);
 
 export default userRouter;

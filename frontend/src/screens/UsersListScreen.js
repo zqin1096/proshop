@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {clearError, getUsers} from "../actions/adminAction";
+import {clearError, deleteUser, getUsers} from "../actions/adminAction";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import {Button, Table} from "react-bootstrap";
@@ -14,7 +14,7 @@ const UsersListScreen = () => {
     useEffect(() => {
         dispatch(clearError());
         dispatch(getUsers());
-    }, [auth.user]);
+    }, []);
 
     return (
         <>
@@ -53,7 +53,9 @@ const UsersListScreen = () => {
                                                 </Button>
                                             </LinkContainer>
                                             <Button variant='danger' className='btn-sm' onClick={() => {
-
+                                                if (window.confirm('Are you sure to delete this customer?')) {
+                                                    dispatch(deleteUser(user._id));
+                                                }
                                             }}>
                                                 <i className='fas fa-trash'/>
                                             </Button>
