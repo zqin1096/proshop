@@ -27,3 +27,8 @@ export const ORDER_FAIL = 'ORDER_FAIL';
 export const CLEAR_ORDER_STATE = 'CLEAR_ORDER_STATE';
 
 export const SET_USER_ORDERS = 'SET_USER_ORDERS';
+
+export const ADMIN_SET_LOADING = 'ADMIN_SET_LOADING';
+export const ADMIN_SET_USERS = 'ADMIN_SET_USERS';
+export const ADMIN_FAIL = 'ADMIN_FAIL';
+export const ADMIN_CLEAR_ERROR = 'ADMIN_CLEAR_ERROR';
