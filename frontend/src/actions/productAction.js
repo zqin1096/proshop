@@ -7,6 +7,21 @@ export const setLoading = () => {
     };
 };
 
+export const deleteProduct = (id) => {
+    return async (dispatch) => {
+        try {
+            dispatch(setLoading());
+            await axios.delete(`/api/products/${id}`);
+            dispatch(getProducts());
+        } catch (error) {
+            dispatch({
+                type: SET_ERROR,
+                payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            });
+        }
+    };
+};
+
 export const getProducts = () => {
     return async (dispatch) => {
         try {

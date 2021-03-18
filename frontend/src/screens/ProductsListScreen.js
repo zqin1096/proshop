@@ -1,11 +1,11 @@
 import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {clearError, deleteUser} from "../actions/adminAction";
+import {clearError} from "../actions/adminAction";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import {Button, Col, Row, Table} from "react-bootstrap";
 import {LinkContainer} from 'react-router-bootstrap';
-import {getProducts} from "../actions/productAction";
+import {deleteProduct, getProducts} from "../actions/productAction";
 
 const ProductsListScreen = () => {
     const dispatch = useDispatch();
@@ -67,8 +67,8 @@ const ProductsListScreen = () => {
                                                 </Button>
                                             </LinkContainer>
                                             <Button variant='danger' className='btn-sm' onClick={() => {
-                                                if (window.confirm('Are you sure to delete this customer?')) {
-                                                    dispatch(deleteUser(product._id));
+                                                if (window.confirm('Are you sure to delete this product?')) {
+                                                    dispatch(deleteProduct(product._id));
                                                 }
                                             }}>
                                                 <i className='fas fa-trash'/>

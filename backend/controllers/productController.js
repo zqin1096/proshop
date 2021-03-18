@@ -1,6 +1,20 @@
 import Product from "../models/productModel.js";
 import asyncHandler from 'express-async-handler';
 
+// Delete a product.
+// DELETE /api/products/:id
+// Private. Admin.
+export const deleteProduct = asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id);
+    if (product) {
+        await Product.deleteOne({_id: product._id});
+        res.sendStatus(200);
+    } else {
+        res.status(404);
+        throw new Error('Product not found');
+    }
+});
+
 // Get all products.
 // GET /api/products
 // Public
