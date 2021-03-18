@@ -9,7 +9,6 @@ import {LinkContainer} from 'react-router-bootstrap';
 const UsersListScreen = () => {
     const dispatch = useDispatch();
     const admin = useSelector(state => state.admin);
-    useSelector(state => state.auth);
     useEffect(() => {
         dispatch(clearError());
         dispatch(getUsers());
