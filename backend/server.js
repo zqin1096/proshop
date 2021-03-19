@@ -6,6 +6,8 @@ import userRouter from "./routes/userRoutes.js";
 import {errorHandler, notFound} from "./middlewares/errorMiddleware.js";
 import colors from 'colors';
 import orderRouter from "./routes/orderRoutes.js";
+import uploadRouter from "./routes/uploadRoutes.js";
+import path from "path";
 
 dotenv.config();
 
@@ -24,11 +26,16 @@ app.get('/', (req, res) => {
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
+app.use('/api/upload', uploadRouter);
 
 // Get the PayPal client ID (PayPal developer sandbox app).
 app.get('/api/config/paypal', (req, res) => {
     res.send(process.env.PAYPAL_CLIENT_ID);
 });
+
+// Make the uploads folder accessible.
+const __dirname = path.resolve();
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 // If no matching route is found, it proceeds to the notfound handler.
 app.use(notFound);

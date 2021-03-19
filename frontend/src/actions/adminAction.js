@@ -26,6 +26,14 @@ export const addProduct = (product) => {
     return async (dispatch) => {
         try {
             dispatch(setLoading());
+            // Upload the image first.
+            const path = await axios.post('/api/upload', product.image, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            // Set the path of the image.
+            product.image = path.data;
             const config = {
                 headers: {
                     'Content-Type': 'application/json'
@@ -47,6 +55,15 @@ export const updateProduct = (product) => {
     return async (dispatch) => {
         try {
             dispatch(setLoading());
+            // When update a product, image is not required.
+            if (product.image) {
+                const path = await axios.post('/api/upload', product.image, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                product.image = path.data;
+            }
             const config = {
                 headers: {
                     'Content-Type': 'application/json'

@@ -6,6 +6,7 @@ const ProductEditModal = (props) => {
 
     const product = props.product;
     const [name, setName] = useState('');
+    const [image, setImage] = useState(null);
     const [brand, setBrand] = useState('');
     const [category, setCategory] = useState('');
     const [description, setDescription] = useState('');
@@ -31,7 +32,9 @@ const ProductEditModal = (props) => {
             <Modal.Body>
                 <Form onSubmit={(event) => {
                     event.preventDefault();
-                    props.onSubmit(name, '/images/sample.jpg', brand, category, description, price, countInStock, product ? product._id : undefined);
+                    const formData = new FormData();
+                    formData.append('image', image);
+                    props.onSubmit(name, image == null ? null : formData, brand, category, description, price, countInStock, product ? product._id : undefined);
                     setName('');
                     setBrand('');
                     setCategory(states[0].state);
@@ -46,6 +49,14 @@ const ProductEditModal = (props) => {
                                       onChange={(event) => {
                                           setName(event.target.value);
                                       }}/>
+                    </Form.Group>
+                    <Form.Group controlId='image'>
+                        <Form.File
+                            label='Image'
+                            required={product == null}
+                            onChange={(event) => {
+                                setImage(event.target.files[0]);
+                            }}/>
                     </Form.Group>
                     <Form.Group controlId='brand'>
                         <Form.Label>Brand</Form.Label>

@@ -5,7 +5,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import {Button, Col, Row, Table} from "react-bootstrap";
 import {deleteProduct, getProducts} from "../actions/productAction";
-import ProductEditModal from "./ProductEditModal";
+import ProductEditModal from "../components/ProductEditModal";
 
 const ProductsListScreen = () => {
     const dispatch = useDispatch();

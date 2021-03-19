@@ -26,7 +26,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product) {
         product.name = req.body.name;
-        product.image = req.body.image;
+        product.image = req.body.image || product.image;
         product.brand = req.body.brand;
         product.category = req.body.category;
         product.description = req.body.description;
