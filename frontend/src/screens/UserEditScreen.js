@@ -5,7 +5,7 @@ import FormContainer from "../components/FormContainer";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import {Button, Form} from "react-bootstrap";
-import {clearUser, getUserById, updateUser} from "../actions/adminAction";
+import {getUserById, updateUser} from "../actions/adminAction";
 
 const UserEditScreen = (props) => {
     const [name, setName] = useState('');

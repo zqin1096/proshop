@@ -4,7 +4,7 @@ import {
     ADMIN_SET_LOADING,
     ADMIN_CLEAR_ERROR,
     ADMIN_SET_USER,
-    ADMIN_CLEAR_USER
+    ADMIN_CLEAR_USER, ADMIN_CLEAR_LOADING
 } from "../actions/types";
 
 const initialState = {
@@ -20,6 +20,11 @@ export const adminReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: true
+            };
+        case ADMIN_CLEAR_LOADING:
+            return {
+                ...state,
+                loading: false
             };
         case ADMIN_SET_USER:
             return {

@@ -1,5 +1,5 @@
 import {
-    ADMIN_CLEAR_ERROR,
+    ADMIN_CLEAR_ERROR, ADMIN_CLEAR_LOADING,
     ADMIN_CLEAR_USER,
     ADMIN_FAIL,
     ADMIN_SET_LOADING,
@@ -8,10 +8,59 @@ import {
     UPDATE_USER
 } from "./types";
 import axios from "axios";
+import {getProducts} from "./productAction";
 
 export const setLoading = () => {
     return {
         type: ADMIN_SET_LOADING
+    };
+};
+
+export const clearLoading = () => {
+    return {
+        type: ADMIN_CLEAR_LOADING
+    };
+};
+
+export const addProduct = (product) => {
+    return async (dispatch) => {
+        try {
+            dispatch(setLoading());
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            await axios.post('/api/products', product, config);
+            dispatch(clearLoading());
+            dispatch(getProducts());
+        } catch (error) {
+            dispatch({
+                type: ADMIN_FAIL,
+                payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            });
+        }
+    };
+};
+
+export const updateProduct = (product) => {
+    return async (dispatch) => {
+        try {
+            dispatch(setLoading());
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            await axios.put(`/api/products/${product.id}`, product, config);
+            dispatch(clearLoading());
+            dispatch(getProducts());
+        } catch (error) {
+            dispatch({
+                type: ADMIN_FAIL,
+                payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            });
+        }
     };
 };
 
@@ -31,7 +80,6 @@ export const updateUser = (user, id) => {
                     'Content-Type': 'application/json'
                 }
             };
-            console.log(id);
             const res = await axios.put(`/api/users/${id}`, user, config);
             dispatch({
                 type: ADMIN_SET_USER,
