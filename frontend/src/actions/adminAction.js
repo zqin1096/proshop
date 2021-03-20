@@ -4,7 +4,7 @@ import {
     ADMIN_FAIL,
     ADMIN_SET_LOADING, ADMIN_SET_ORDERS,
     ADMIN_SET_USER,
-    ADMIN_SET_USERS,
+    ADMIN_SET_USERS, ORDER_SUCCESS,
 } from "./types";
 import axios from "axios";
 import {getProducts} from "./productAction";
@@ -18,6 +18,25 @@ export const setLoading = () => {
 export const clearLoading = () => {
     return {
         type: ADMIN_CLEAR_LOADING
+    };
+};
+
+export const setOrderDelivered = (id) => {
+    return async (dispatch) => {
+        try {
+            dispatch(setLoading());
+            const res = await axios.put(`/api/orders/${id}/deliver`);
+            dispatch({
+                type: ORDER_SUCCESS,
+                payload: res.data
+            });
+            dispatch(clearLoading());
+        } catch (error) {
+            dispatch({
+                type: ADMIN_FAIL,
+                payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            });
+        }
     };
 };
 

@@ -6,12 +6,14 @@ import Message from "../components/Message";
 import {Button, Card, Container, Image, ListGroup, Row} from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import {Link} from "react-router-dom";
+import {setOrderDelivered} from "../actions/adminAction";
 
 const OrderScreen = (props) => {
 
     const orderId = props.match.params.id;
     const dispatch = useDispatch();
     const order = useSelector(state => state.order);
+    const auth = useSelector(state => state.auth);
 
     const [date, setDate] = useState(null);
 
@@ -97,7 +99,7 @@ const OrderScreen = (props) => {
                 </Card>
 
                 {order.order.isDelivered ?
-                    (<Message variant='success'>Delivered on {order.order.deliveredAt}</Message>) :
+                    (<Message variant='success'>Delivered on {order.order.deliveredAt.substring(0, 10)}</Message>) :
                     (<Message variant='danger'>Not Delivered</Message>)
                 }
                 <ListGroup variant='flush' className='mt-3'>
@@ -140,6 +142,13 @@ const OrderScreen = (props) => {
                         )
                     })}
                 </ListGroup>
+                {auth.user.isAdmin && !order.order.isDelivered &&
+                <Button type='button' className='btn btn-block' onClick={() => {
+                    dispatch(setOrderDelivered(order.order._id));
+                }}>
+                    Mark As Delivered
+                </Button>
+                }
             </Container>
 };
 

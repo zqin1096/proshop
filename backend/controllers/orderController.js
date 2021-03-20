@@ -1,6 +1,22 @@
 import asyncHandler from "express-async-handler";
 import Order from "../models/orderModel.js";
 
+// Update the order to be delivered.
+// PUT /api/orders/:id/deliver
+// Private. Admin.
+export const updateOrderToDelivered = asyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id).populate('user', 'name email').populate('shippingAddress');
+    if (order) {
+        order.isDelivered = true;
+        order.deliveredAt = Date.now();
+        const updatedOrder = await order.save();
+        res.json(updatedOrder);
+    } else {
+        res.status(404);
+        throw new Error('Order not found');
+    }
+});
+
 // Get all the orders.
 // GET /api/orders/admin/all
 // Private. Admin.
