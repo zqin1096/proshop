@@ -4,18 +4,25 @@ import {
     ADMIN_SET_LOADING,
     ADMIN_CLEAR_ERROR,
     ADMIN_SET_USER,
-    ADMIN_CLEAR_USER, ADMIN_CLEAR_LOADING
+    ADMIN_CLEAR_USERS, ADMIN_CLEAR_LOADING, ADMIN_SET_ORDERS
 } from "../actions/types";
 
 const initialState = {
     loading: false,
     user: null,
     users: null,
+    orders: null,
     error: null
 };
 
 export const adminReducer = (state = initialState, action) => {
     switch (action.type) {
+        case ADMIN_SET_ORDERS:
+            return {
+                ...state,
+                loading: false,
+                orders: action.payload
+            };
         case ADMIN_SET_LOADING:
             return {
                 ...state,
@@ -32,7 +39,7 @@ export const adminReducer = (state = initialState, action) => {
                 loading: false,
                 user: action.payload
             };
-        case ADMIN_CLEAR_USER:
+        case ADMIN_CLEAR_USERS:
             return {
                 ...state,
                 user: null

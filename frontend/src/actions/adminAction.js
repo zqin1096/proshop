@@ -1,11 +1,10 @@
 import {
     ADMIN_CLEAR_ERROR, ADMIN_CLEAR_LOADING,
-    ADMIN_CLEAR_USER,
+    ADMIN_CLEAR_USERS,
     ADMIN_FAIL,
-    ADMIN_SET_LOADING,
+    ADMIN_SET_LOADING, ADMIN_SET_ORDERS,
     ADMIN_SET_USER,
     ADMIN_SET_USERS,
-    UPDATE_USER
 } from "./types";
 import axios from "axios";
 import {getProducts} from "./productAction";
@@ -19,6 +18,23 @@ export const setLoading = () => {
 export const clearLoading = () => {
     return {
         type: ADMIN_CLEAR_LOADING
+    };
+};
+
+export const getAllOrders = () => {
+    return async (dispatch) => {
+        try {
+            const res = await axios.get('/api/orders/admin/all');
+            dispatch({
+                type: ADMIN_SET_ORDERS,
+                payload: res.data
+            });
+        } catch (error) {
+            dispatch({
+                type: ADMIN_FAIL,
+                payload: error.response && error.response.data.message ? error.response.data.message : error.message
+            });
+        }
     };
 };
 
@@ -83,7 +99,7 @@ export const updateProduct = (product) => {
 
 export const clearUser = () => {
     return {
-        type: ADMIN_CLEAR_USER
+        type: ADMIN_CLEAR_USERS
     };
 };
 

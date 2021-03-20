@@ -1,10 +1,17 @@
 import asyncHandler from "express-async-handler";
 import Order from "../models/orderModel.js";
 
+// Get all the orders.
+// GET /api/orders/admin/all
+// Private. Admin.
+export const getAllOrders = asyncHandler(async (req, res) => {
+    const orders = await Order.find({}).populate('user', 'id name');
+    res.json(orders);
+});
+
 // Create a new order.
 // POST /api/orders
 // Private.
-
 export const addOrder = asyncHandler(async (req, res) => {
     const {orderItems, shippingAddress, paymentMethod, shippingPrice, taxPrice, totalPrice} = req.body.order;
     if (!orderItems || orderItems.length === 0) {
@@ -38,8 +45,8 @@ export const addOrder = asyncHandler(async (req, res) => {
 export const getOrder = asyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id).populate('user', 'name email').populate('shippingAddress'); // Only returns the name and email of the user.
     if (order) {
-        // Prevent other users to see this page.
-        if (String(order.user._id) === String(req.user._id)) {
+        // Prevent other users to see this page. Admin user can see this page.
+        if (req.user.isAdmin || String(order.user._id) === String(req.user._id)) {
             res.json(order);
         } else {
             res.status(401);
@@ -60,4 +67,3 @@ export const getOrders = asyncHandler(async (req, res) => {
     });
     res.json(orders);
 });
-
