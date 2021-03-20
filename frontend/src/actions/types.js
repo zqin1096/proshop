@@ -8,6 +8,7 @@ export const PRODUCT_CLEAR_ERROR = 'CLEAR_ERROR';
 export const ADD_PRODUCT = 'ADD_PRODUCT';
 export const REMOVE_PRODUCT = 'REMOVE_PRODUCT';
 export const UPDATE_QUANTITY = 'UPDATE_QUANTITY';
+export const CLEAR_CART = 'CLEAR_CART';
 
 export const AUTH_SET_LOADING = 'AUTH_SET_LOADING';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';

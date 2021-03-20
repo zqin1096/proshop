@@ -1,5 +1,6 @@
 import {CLEAR_ORDER_STATE, ORDER_FAIL, ORDER_SET_LOADING, ORDER_SUCCESS, SET_USER_ORDERS} from "./types";
 import axios from "axios";
+import {clearCart} from "./cartAction";
 
 export const createOrder = (order, paymentResult) => {
     return async (dispatch) => {
@@ -19,7 +20,9 @@ export const createOrder = (order, paymentResult) => {
             dispatch({
                 type: ORDER_SUCCESS,
                 payload: res.data
-            })
+            });
+            dispatch(clearCart());
+            localStorage.removeItem('cart');
         } catch (error) {
             dispatch({
                 type: ORDER_FAIL,

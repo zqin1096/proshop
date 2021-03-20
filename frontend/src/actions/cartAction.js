@@ -1,4 +1,10 @@
-import {ADD_PRODUCT, REMOVE_PRODUCT, UPDATE_QUANTITY} from "./types";
+import {ADD_PRODUCT, CLEAR_CART, REMOVE_PRODUCT, UPDATE_QUANTITY} from "./types";
+
+export const clearCart = () => {
+    return {
+        type: CLEAR_CART
+    };
+};
 
 export const addProduct = (product, quantity) => {
     // getState is a function which can be called to get the entire state.
