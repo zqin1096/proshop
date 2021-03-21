@@ -1,6 +1,44 @@
 import Product from "../models/productModel.js";
 import asyncHandler from 'express-async-handler';
 
+// Check if the user has reviewed the product.
+// GET /api/products/:id/is-reviewed
+// Private.
+export const isReviewed = asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id);
+    res.json({
+        isReviewed: product.reviews.find((review) => review.user.toString() === req.user._id.toString()) != null
+    });
+});
+
+// Add a new review.
+// POST /api/products/:id/reviews
+// Private.
+export const addReview = asyncHandler(async (req, res) => {
+    const {rating, comment} = req.body;
+    // Find the product.
+    const product = await Product.findById(req.params.id);
+    if (product) {
+        // Create the review.
+        const review = {
+            user: req.user._id,
+            rating: Number(rating),
+            comment: comment
+        };
+        // Add it to the reviews array.
+        product.reviews.push(review);
+        // Update the number of reviews.
+        product.numReviews = product.reviews.length;
+        // Update the rating.
+        product.rating = (Math.round(product.reviews.reduce((accumulator, item) => Number(accumulator) + Number(item.rating), 0) / product.reviews.length * 100) / 100).toFixed(1);
+        await product.save();
+        res.sendStatus(201);
+    } else {
+        res.status(404);
+        throw new Error('Product not found');
+    }
+});
+
 // Add a product.
 // POST /api/products
 // Private. Admin.
@@ -73,7 +111,12 @@ export const getProducts = asyncHandler(async (req, res) => {
 // asyncHandler: Simple middleware for handling exceptions inside of async express routes and passing them to your
 // express error handlers.
 export const getProduct = asyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate({
+        path: 'reviews',
+        populate: {
+            path: 'user'
+        }
+    });
     if (product) {
         res.json(product);
     } else {

@@ -8,12 +8,18 @@ import colors from 'colors';
 import orderRouter from "./routes/orderRoutes.js";
 import uploadRouter from "./routes/uploadRoutes.js";
 import path from "path";
+import morgan from 'morgan';
 
 dotenv.config();
 
 connectDB();
 
 const app = express();
+
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
+
 // express.json() parses incoming requests with JSON payloads.
 // A new body object containing the parsed data is populated on the request object after the middleware (i.e. req.body),
 // or an empty object ({}) if there was no body to parse, the Content-Type was not matched, or an error occurred.
