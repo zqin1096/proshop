@@ -1,11 +1,34 @@
 import Product from "../models/productModel.js";
 import asyncHandler from 'express-async-handler';
+import {Review} from "../models/reviewModel.js";
+
+// Update a review.
+// PUT /api/products/:id/
+// Private.
+export const updateReview = asyncHandler(async (req, res) => {
+    const {rating, comment} = req.body;
+    // Find the product.
+    const product = await Product.findById(req.params.id).populate('reviews');
+    if (product) {
+        const id = product.reviews.find((review) => review.user.toString() === req.user._id.toString())._id;
+        const review = await Review.findById(id);
+        review.rating = rating;
+        review.comment = comment;
+        await review.save();
+        product.rating = (Math.round(product.reviews.reduce((accumulator, item) => Number(accumulator) + Number(item.rating), 0) / product.reviews.length * 100) / 100).toFixed(1);
+        await product.save();
+        res.sendStatus(200);
+    } else {
+        res.status(404);
+        throw new Error('Product not found');
+    }
+});
 
 // Check if the user has reviewed the product.
 // GET /api/products/:id/is-reviewed
 // Private.
 export const isReviewed = asyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate('reviews');
     res.json({
         isReviewed: product.reviews.find((review) => review.user.toString() === req.user._id.toString()) != null
     });
@@ -20,17 +43,19 @@ export const addReview = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product) {
         // Create the review.
-        const review = {
+        const review = await Review.create({
             user: req.user._id,
             rating: Number(rating),
             comment: comment
-        };
+        });
         // Add it to the reviews array.
-        product.reviews.push(review);
+        product.reviews.push(review._id);
         // Update the number of reviews.
         product.numReviews = product.reviews.length;
+        await product.save();
         // Update the rating.
-        product.rating = (Math.round(product.reviews.reduce((accumulator, item) => Number(accumulator) + Number(item.rating), 0) / product.reviews.length * 100) / 100).toFixed(1);
+        const {reviews} = await Product.findById(req.params.id).populate('reviews');
+        product.rating = (Math.round(reviews.reduce((accumulator, item) => Number(accumulator) + Number(item.rating), 0) / product.reviews.length * 100) / 100).toFixed(1);
         await product.save();
         res.sendStatus(201);
     } else {
@@ -114,7 +139,8 @@ export const getProduct = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id).populate({
         path: 'reviews',
         populate: {
-            path: 'user'
+            path: 'user',
+            select: 'name'
         }
     });
     if (product) {

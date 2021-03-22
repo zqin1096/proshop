@@ -5,7 +5,7 @@ import {
     deleteProduct,
     getProduct,
     getProducts, isReviewed,
-    updateProduct
+    updateProduct, updateReview
 } from "../controllers/productController.js";
 import {authorize, checkIsAdmin} from "../middlewares/authMiddleware.js";
 
@@ -20,6 +20,7 @@ productRouter.route('/:id').put(authorize, checkIsAdmin, updateProduct);
 
 productRouter.route('/:id/reviews').post(authorize, addReview);
 productRouter.route('/:id/is-reviewed').get(authorize, isReviewed);
+productRouter.route('/:id/reviews').put(authorize, updateReview);
 
 
 export default productRouter;
