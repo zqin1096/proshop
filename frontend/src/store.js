@@ -7,6 +7,7 @@ import {authReducer} from "./reducers/authReducer";
 import {shippingAddressReducer} from "./reducers/shippingAddressReducer";
 import {orderReducer} from "./reducers/orderReducer";
 import {adminReducer} from "./reducers/adminReducer";
+import {reviewReducer} from "./reducers/reviewReducer";
 
 const reducer = combineReducers({
     product: productReducer,
@@ -14,7 +15,8 @@ const reducer = combineReducers({
     auth: authReducer,
     shippingAddress: shippingAddressReducer,
     order: orderReducer,
-    admin: adminReducer
+    admin: adminReducer,
+    review: reviewReducer
 });
 const initialState = {
     // Get the cart from localStorage.

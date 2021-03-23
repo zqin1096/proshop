@@ -9,6 +9,7 @@ import {
 } from "./types";
 import axios from "axios";
 import {clearUser} from "./adminAction";
+import {clearState} from "./reviewAction";
 
 export const setLoading = () => {
     return {
@@ -102,6 +103,8 @@ export const logout = () => {
         });
         // Clear the user in the admin state.
         dispatch(clearUser());
+        // Clear the review state.
+        dispatch(clearState());
     };
 };
 

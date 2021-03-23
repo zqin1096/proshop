@@ -7,6 +7,7 @@ import {Button, Card, Container, Image, ListGroup, Row} from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import {Link} from "react-router-dom";
 import {setOrderDelivered} from "../actions/adminAction";
+import {LinkContainer} from "react-router-bootstrap";
 
 const OrderScreen = (props) => {
 
@@ -130,12 +131,14 @@ const OrderScreen = (props) => {
                                         </Row>
                                     </Col>
                                     <Col md={4}>
-                                        <Button
-                                            type='button'
-                                            className='text-dark mt-2'
-                                            style={{borderRadius: '5px', background: '#eef0f2'}}>
-                                            Write a product review
-                                        </Button>
+                                        <LinkContainer to={`/product/${item.id}/create-review`}
+                                                       style={{borderRadius: '5px', background: '#eef0f2'}}>
+                                            <Button
+                                                type='button'
+                                                className='text-dark mt-2'>
+                                                Write a customer review
+                                            </Button>
+                                        </LinkContainer>
                                     </Col>
                                 </Row>
                             </Card>

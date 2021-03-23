@@ -30,7 +30,7 @@ const Rate = (props) => {
 
 Rate.propTypes = {
     value: PropTypes.number.isRequired,
-    text: PropTypes.string.isRequired
+    text: PropTypes.string
 }
 
 export default Rate;
