@@ -22,11 +22,12 @@ export const deleteProduct = (id) => {
     };
 };
 
-export const getProducts = () => {
+// If keyword is undefined, then its default value is an empty string.
+export const getProducts = (keyword = '') => {
     return async (dispatch) => {
         try {
             dispatch(setLoading());
-            const res = await axios.get('/api/products');
+            const res = await axios.get(`/api/products?keyword=${keyword}`);
             dispatch({
                 type: SET_PRODUCTS,
                 payload: res.data

@@ -5,6 +5,8 @@ import {LinkContainer} from 'react-router-bootstrap';
 import {useSelector, useDispatch} from "react-redux";
 import {logout} from "../actions/authAction";
 import {withRouter} from 'react-router-dom';
+import SearchBox from "./SearchBox";
+import {Route} from 'react-router-dom';
 
 const Header = (props) => {
     const dispatch = useDispatch();
@@ -26,6 +28,7 @@ const Header = (props) => {
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                     {/*Collapses the content behind a button when the screen size decreases to a certain point.*/}
                     <Navbar.Collapse id="basic-navbar-nav">
+                        <Route render={(props) => <SearchBox {...props}/>}/>
                         <Nav className="ml-auto">
                             {/*Check font awesome website*/}
                             <LinkContainer to='/cart'>

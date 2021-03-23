@@ -7,7 +7,9 @@ import {useDispatch, useSelector} from "react-redux";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 
-const HomeScreen = () => {
+const HomeScreen = (props) => {
+    const keyword = props.match.params.keyword;
+
     const dispatch = useDispatch();
     // Get the "product" state.
     const product = useSelector(state => state.product);
@@ -15,8 +17,8 @@ const HomeScreen = () => {
     useEffect(() => {
         // Clear the error if exists before sending the request.
         dispatch(clearError());
-        dispatch(getProducts());
-    }, []);
+        dispatch(getProducts(keyword));
+    }, [keyword]);
 
     return (
         <>
